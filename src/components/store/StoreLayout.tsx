@@ -15,14 +15,33 @@ const StoreLayout = ({ children }) => {
     const [storeInfo, setStoreInfo] = useState(null)
 
     const fetchIsSeller = async () => {
-        setIsSeller(true)
-        setStoreInfo(dummyStoreData)
-        setLoading(false)
-    }
+        try {
+            const res = await fetch("/api/auth/get-me");
+            if (!res.ok) {
+                setIsSeller(false);
+                return;
+            }
+            const { user } = await res.json();
+            if (user.role !== "seller") {
+                setIsSeller(false);
+                return;
+            }
+
+            setIsSeller(true);
+            setStoreInfo(dummyStoreData);
+
+        } catch (error) {
+            console.error(error);
+            setIsSeller(false);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        fetchIsSeller()
-    }, [])
+        fetchIsSeller();
+    }, []);
+
 
     return loading ? (
         <Loading />

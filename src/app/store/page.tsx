@@ -1,41 +1,100 @@
-'use client'
-import { dummyStoreDashboardData } from "@/assets/assets"
-import Loading from "@/components/Loading"
-import { formatIndianRupees } from "@/lib/currency"
-import { CircleDollarSignIcon, ShoppingBasketIcon, StarIcon, TagsIcon } from "lucide-react"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import {
+    CircleDollarSignIcon,
+    ShoppingBasketIcon,
+    StarIcon,
+    TagsIcon,
+} from "lucide-react";
+
+import { dummyStoreDashboardData } from "@/assets/assets";
+import Loading from "@/components/Loading";
+
+interface Rating {
+    _id?: string;
+    user?: string;
+    rating: number;
+    review?: string;
+    createdAt?: string;
+}
+
+interface DashboardData {
+    totalProducts: number;
+    totalEarnings: number;
+    totalOrders: number;
+    ratings: Rating[];
+}
 
 export default function Dashboard() {
+    const router = useRouter();
 
-    const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || '₹'
+    const [loading, setLoading] = useState(true);
 
-    const router = useRouter()
-
-    const [loading, setLoading] = useState(true)
-    const [dashboardData, setDashboardData] = useState({
+    const [dashboardData, setDashboardData] = useState<DashboardData>({
         totalProducts: 0,
         totalEarnings: 0,
         totalOrders: 0,
         ratings: [],
-    })
+    });
 
     const dashboardCardsData = [
-        { title: 'Total Products', value: dashboardData.totalProducts, icon: ShoppingBasketIcon },
-        { title: 'Total Earnings', value: formatIndianRupees(dashboardData.totalEarnings), icon: CircleDollarSignIcon },
-        { title: 'Total Orders', value: dashboardData.totalOrders, icon: TagsIcon },
-        { title: 'Total Ratings', value: dashboardData.ratings.length, icon: StarIcon },
-    ]
+        {
+            title: "Total Products",
+            value: dashboardData.totalProducts,
+            icon: ShoppingBasketIcon,
+        },
+        {
+            title: "Total Earnings",
+            value: dashboardData.totalEarnings,
+            icon: CircleDollarSignIcon,
+        },
+        {
+            title: "Total Orders",
+            value: dashboardData.totalOrders,
+            icon: TagsIcon,
+        },
+        {
+            title: "Total Ratings",
+            value: dashboardData.ratings.length,
+            icon: StarIcon,
+        },
+    ];
 
     const fetchDashboardData = async () => {
-        setDashboardData(dummyStoreDashboardData)
-        setLoading(false)
-    }
+        try {
+            // Check logged in user
+            const authRes = await fetch("/api/auth/get-me");
+
+            if (!authRes.ok) {
+                router.replace("/login");
+                return;
+            }
+
+            const { user } = await authRes.json();
+
+            // Only sellers can access
+            if (user.role !== "seller") {
+                router.replace("/");
+                return;
+            }
+
+            // Temporary dummy data
+            setDashboardData(dummyStoreDashboardData);
+
+        } catch (error) {
+            console.error(error);
+            router.replace("/login");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        fetchDashboardData()
-    }, [])
+        fetchDashboardData();
+    }, []);
 
     if (loading) return <Loading />
 

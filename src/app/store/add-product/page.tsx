@@ -1,7 +1,7 @@
-'use client'
+"use client"
+import React, { useState } from "react"
 import { assets } from "@/assets/assets"
 import Image from "next/image"
-import { useState } from "react"
 import { toast } from "react-hot-toast"
 
 export default function StoreAddProduct() {
@@ -19,11 +19,17 @@ export default function StoreAddProduct() {
     const [loading, setLoading] = useState(false)
 
 
-    const onChangeHandler = (e) => {
-        setProductInfo({ ...productInfo, [e.target.name]: e.target.value })
+    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const target = e.target as HTMLInputElement
+        const name = target.name
+        let value: any = target.value
+        if (target.type === 'number') {
+            value = Number(target.value) || 0
+        }
+        setProductInfo({ ...productInfo, [name]: value })
     }
 
-    const onSubmitHandler = async (e) => {
+    const onSubmitHandler = async (e: React.FormEvent) => {
         e.preventDefault()
         // Logic to add a product
 

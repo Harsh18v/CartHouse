@@ -1,19 +1,33 @@
+'use client'
+
+import Link from "next/link";
 import { categories } from "@/assets/assets";
 
 const CategoriesMarquee = () => {
-
     return (
-        <div className="overflow-hidden w-full relative max-w-7xl mx-auto select-none group sm:my-20">
-            <div className="absolute left-0 top-0 h-full w-20 z-10 pointer-events-none bg-linear-to-r from-white to-transparent" />
-            <div className="flex min-w-[200%] animate-[marqueeScroll_10s_linear_infinite] sm:animate-[marqueeScroll_40s_linear_infinite] group-hover:[animation-play-state:paused] gap-4" >
-                {[...categories, ...categories, ...categories, ...categories].map((company, index) => (
-                    <button key={index} className="px-5 py-2 bg-slate-100 rounded-lg text-slate-500 text-xs sm:text-sm hover:bg-slate-600 hover:text-white active:scale-95 transition-all duration-300">
-                        {company}
-                    </button>
+        <section className="relative mx-auto mt-16 max-w-7xl overflow-hidden select-none">
+
+            {/* Left Fade */}
+            <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-16 bg-gradient-to-r from-white to-transparent" />
+
+            <div className="group flex min-w-max gap-4 whitespace-nowrap animate-[marqueeScroll_35s_linear_infinite] hover:[animation-play-state:paused]">
+
+                {[...categories, ...categories].map((category, index) => (
+                    <Link
+                        key={`${category}-${index}`}
+                        href={`/shop?category=${encodeURIComponent(category)}`}
+                        className="rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-700 transition-all duration-300 hover:border-indigo-600 hover:bg-indigo-600 hover:text-white hover:shadow-md"
+                    >
+                        {category}
+                    </Link>
                 ))}
+
             </div>
-            <div className="absolute right-0 top-0 h-full w-20 md:w-40 z-10 pointer-events-none bg-linear-to-l from-white to-transparent" />
-        </div>
+
+            {/* Right Fade */}
+            <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-16 bg-gradient-to-l from-white to-transparent" />
+
+        </section>
     );
 };
 

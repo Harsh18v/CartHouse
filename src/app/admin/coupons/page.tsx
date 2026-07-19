@@ -3,11 +3,11 @@ import { useEffect, useState } from "react"
 import { format } from "date-fns"
 import toast from "react-hot-toast"
 import { DeleteIcon } from "lucide-react"
-import { couponDummyData } from "@/assets/assets"
+import { couponDummyData, type Coupon } from "@/assets/assets"
 
 export default function AdminCoupons() {
 
-    const [coupons, setCoupons] = useState([])
+    const [coupons, setCoupons] = useState<Coupon[]>([])
 
     const [newCoupon, setNewCoupon] = useState({
         code: '',
@@ -23,18 +23,18 @@ export default function AdminCoupons() {
         setCoupons(couponDummyData)
     }
 
-    const handleAddCoupon = async (e) => {
+    const handleAddCoupon = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         // Logic to add a coupon
 
 
     }
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewCoupon({ ...newCoupon, [e.target.name]: e.target.value })
     }
 
-    const deleteCoupon = async (code) => {
+    const deleteCoupon = async (code: string) => {
         // Logic to delete a coupon
 
 
@@ -113,7 +113,7 @@ export default function AdminCoupons() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-200">
-                            {coupons.map((coupon) => (
+                            {coupons.map((coupon: Coupon) => (
                                 <tr key={coupon.code} className="hover:bg-slate-50">
                                     <td className="py-3 px-4 font-medium text-slate-800">{coupon.code}</td>
                                     <td className="py-3 px-4 text-slate-800">{coupon.description}</td>

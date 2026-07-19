@@ -7,18 +7,35 @@ import AdminNavbar from "./AdminNavbar"
 import AdminSidebar from "./AdminSidebar"
 
 const AdminLayout = ({ children }) => {
-
     const [isAdmin, setIsAdmin] = useState(false)
     const [loading, setLoading] = useState(true)
 
     const fetchIsAdmin = async () => {
-        setIsAdmin(true)
-        setLoading(false)
-    }
+        try {
+            const res = await fetch("/api/auth/get-me");
+            if (!res.ok) {
+                setIsAdmin(false);
+                return;
+            }
+            const { user } = await res.json();
+            if (user.role !== "admin") {
+                setIsAdmin(false);
+                return;
+            }
+
+            setIsAdmin(true);
+
+        } catch (error) {
+            console.error(error);
+            setIsAdmin(false);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        fetchIsAdmin()
-    }, [])
+        fetchIsAdmin();
+    }, []);
 
     return loading ? (
         <Loading />

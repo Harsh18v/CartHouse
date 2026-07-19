@@ -1,19 +1,10 @@
 "use client";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Package, MapPin, CreditCard, Lock, Heart, Gift, Star, HelpCircle, ChevronRight, RotateCcw, ArrowBigRight } from "lucide-react";
+import toast from "react-hot-toast";
 
-import {
-    Package,
-    MapPin,
-    CreditCard,
-    Lock,
-    Heart,
-    Gift,
-    Star,
-    HelpCircle,
-    ChevronRight,
-    RotateCcw,
-} from "lucide-react";
-
-const userName = "Om Vishwakarma";
 
 const accountSections = [
     {
@@ -91,26 +82,90 @@ const recentOrders = [
 ];
 
 const statusStyles: Record<string, string> = {
-    Delivered: "bg-green-100 text-green-700",
-    Shipped: "bg-blue-100 text-blue-700",
-    Processing: "bg-orange-100 text-orange-700",
+    Delivered: "bg-green-50 text-green-700",
+    Shipped: "bg-indigo-50 text-indigo-700",
+    Processing: "bg-orange-50 text-orange-700",
 };
 
 export default function AccountPage() {
+
+    const [user, setUser] = useState<{ name?: string } | null>(null)
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState("")
+    const router = useRouter();
+
+    const fetchUser = async () => {
+        try {
+            setLoading(true);
+            const res = await fetch("/api/auth/get-me", {
+                method: "GET",
+                credentials: "include", // sends the session cookie along with the request
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!res.ok) {
+                throw new Error("Failed to fetch user data");
+            }
+
+            const data = await res.json();
+            setUser(data.user || null);
+        } catch (err: any) {
+            setError(err.message || "Something went wrong");
+            toast.error("Could not load your account details");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+    const handleLogout = async () => {
+        try {
+            const res = await fetch("/api/auth/logout", {
+                method: "POST",
+                credentials: "include",
+            });
+
+            if (!res.ok) {
+                throw new Error("Logout failed");
+            }
+
+            toast.success("Logged out successfully");
+            router.push("/");
+            router.refresh(); // clears any cached user state from Next.js router cache
+        } catch (err: any) {
+            toast.error("Could not log out. Please try again.");
+        }
+    };
+
+    useEffect(() => {
+        fetchUser()
+    }, [])
+
+
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-slate-50">
             <div className="max-w-6xl mx-auto px-6 py-10">
                 {/* Page title */}
-                <h1 className="text-2xl font-semibold text-gray-800 mb-1">Your Account</h1>
-                <p className="text-sm text-gray-500 mb-8">
-                    Hello, {userName.split(" ")[0]} — manage your orders, details, and preferences.
-                </p>
+                <div className="flex justify-between items-center">
+                    <div>
+                        <h1 className="text-2xl font-bold text-slate-800 mb-1">Your Account</h1>
+                        <p className="text-sm text-slate-500 mb-8">
+                            Hello, {user?.name || "there"} — manage your orders, details, and preferences.
+                        </p>
+                    </div>
+                    <button onClick={handleLogout} className="flex items-center gap-2 bg-red-500 p-2 rounded-xl text-white px-4">
+                        <span>Logout</span>
+                        <ArrowBigRight className="w-4 h-4" />
+                    </button>
+                </div>
 
-                {/* Recent order strip — Amazon shows this at top */}
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-8">
+                {/* Recent order strip */}
+                <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 mb-8">
                     <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-base font-semibold text-gray-800">Recent orders</h2>
-                        <a href="#" className="text-sm text-indigo-600 font-medium hover:underline flex items-center gap-1">
+                        <h2 className="text-base font-semibold text-slate-800">Recent orders</h2>
+                        <a href="#" className="text-sm text-indigo-600 font-medium hover:text-indigo-700 flex items-center gap-1">
                             View all orders <ChevronRight className="w-4 h-4" />
                         </a>
                     </div>
@@ -119,7 +174,7 @@ export default function AccountPage() {
                         {recentOrders.map((order) => (
                             <div
                                 key={order.id}
-                                className="border border-gray-100 rounded-xl p-4 hover:border-gray-200 transition-colors"
+                                className="border border-slate-100 rounded-xl p-4 hover:border-indigo-200 hover:shadow-sm transition-all"
                             >
                                 <div className="flex items-start justify-between mb-2">
                                     <span
@@ -127,13 +182,13 @@ export default function AccountPage() {
                                     >
                                         {order.status}
                                     </span>
-                                    <span className="text-xs text-gray-400">{order.date}</span>
+                                    <span className="text-xs text-slate-400">{order.date}</span>
                                 </div>
-                                <p className="text-sm font-medium text-gray-800 mb-1">{order.item}</p>
-                                <p className="text-xs text-gray-400 mb-3">{order.id}</p>
+                                <p className="text-sm font-medium text-slate-800 mb-1">{order.item}</p>
+                                <p className="text-xs text-slate-400 mb-3">{order.id}</p>
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm font-semibold text-gray-800">{order.amount}</span>
-                                    <button className="text-xs font-medium text-gray-600 border border-gray-200 rounded-lg px-3 py-1.5 hover:bg-gray-50 transition-colors flex items-center gap-1">
+                                    <span className="text-sm font-semibold text-slate-800">{order.amount}</span>
+                                    <button onClick={() => router.push("/shop")} className="text-xs font-medium text-indigo-600 border border-indigo-200 rounded-lg px-3 py-1.5 hover:bg-indigo-50 transition-colors flex items-center gap-1">
                                         <RotateCcw className="w-3 h-3" />
                                         Buy again
                                     </button>
@@ -143,43 +198,43 @@ export default function AccountPage() {
                     </div>
                 </div>
 
-                {/* Account sections grid — the core Amazon pattern */}
+                {/* Account sections grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                     {accountSections.map((section) => {
                         const Icon = section.icon;
                         return (
                             <div
                                 key={section.title}
-                                className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover:shadow-md hover:border-gray-200 transition-all cursor-pointer group"
+                                className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 hover:shadow-md hover:border-indigo-200 transition-all cursor-pointer group"
                             >
                                 <div className="flex items-start justify-between mb-4">
-                                    <div className="w-11 h-11 rounded-xl bg-green-50 flex items-center justify-center">
-                                        <Icon className="w-5 h-5 text-green-600" />
+                                    <div className="w-11 h-11 rounded-xl bg-indigo-50 flex items-center justify-center">
+                                        <Icon className="w-5 h-5 text-indigo-600" />
                                     </div>
-                                    <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-gray-500 group-hover:translate-x-0.5 transition-all mt-2" />
+                                    <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-500 group-hover:translate-x-0.5 transition-all mt-2" />
                                 </div>
 
-                                <h3 className="text-sm font-semibold text-gray-800 mb-1">{section.title}</h3>
-                                <p className="text-xs text-gray-500 mb-4 leading-relaxed">
+                                <h3 className="text-sm font-semibold text-slate-800 mb-1">{section.title}</h3>
+                                <p className="text-xs text-slate-500 mb-4 leading-relaxed">
                                     {section.description}
                                 </p>
 
-                                <div className="space-y-1.5 pt-3 border-t border-gray-50">
-                                    {/* {section.links.map((link) => (
-
-                                        key = { link }
-                      href = "#"
-                      className = "block text-xs text-indigo-600 hover:underline"
+                                <div className="space-y-1.5 pt-3 border-t border-slate-50">
+                                    {section.links.map((link) => (
+                                        <Link
+                                            key={link}
+                                            href="/"
+                                            className="block text-xs text-indigo-600 hover:text-indigo-700 hover:underline"
                                         >
-                                        { link }
-                    </a>
-                  ))} */}
+                                            {link}
+                                        </Link>
+                                    ))}
                                 </div>
                             </div>
                         );
                     })}
                 </div>
             </div>
-        </div >
+        </div>
     );
 }

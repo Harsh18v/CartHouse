@@ -1,31 +1,45 @@
-import React from 'react'
-import Title from './Title'
-import { ourSpecsData } from '@/assets/assets'
+import Title from "./Title";
+import { ourSpecsData } from "@/assets/assets";
 
 const OurSpecs = () => {
-
     return (
-        <div className='px-6 my-20 max-w-6xl mx-auto'>
-            <Title visibleButton={false} title='Our Specifications' description="We offer top-tier service and convenience to ensure your shopping experience is smooth, secure and completely hassle-free." />
+        <section className="max-w-7xl mx-auto px-6 py-20">
 
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 gap-y-10 mt-26'>
-                {
-                    ourSpecsData.map((spec, index) => {
-                        return (
-                            <div className='relative h-44 px-8 flex flex-col items-center justify-center w-full text-center border rounded-lg group' style={{ backgroundColor: spec.accent + 10, borderColor: spec.accent + 30 }} key={index}>
-                                <h3 className='text-slate-800 font-medium'>{spec.title}</h3>
-                                <p className='text-sm text-slate-600 mt-3'>{spec.description}</p>
-                                <div className='absolute -top-5 text-white size-10 flex items-center justify-center rounded-md group-hover:scale-105 transition' style={{ backgroundColor: spec.accent }}>
-                                    <spec.icon size={20} />
-                                </div>
+            <Title
+                visibleButton={false}
+                title="Why Shop With Us"
+                description="We're committed to providing a secure, seamless, and enjoyable shopping experience from browsing to delivery."
+            />
+
+            <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+                {ourSpecsData.map((spec) => {
+                    const Icon = spec.icon;
+
+                    return (
+                        <div
+                            key={spec.title}
+                            className="group rounded-3xl border border-gray-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-lg"
+                        >
+                            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 transition-colors duration-300 group-hover:bg-indigo-600 group-hover:text-white">
+                                <Icon size={24} />
                             </div>
-                        )
-                    })
-                }
+
+                            <h3 className="mt-6 text-xl font-semibold text-gray-900">
+                                {spec.title}
+                            </h3>
+
+                            <p className="mt-3 text-sm leading-7 text-gray-600">
+                                {spec.description}
+                            </p>
+                        </div>
+                    );
+                })}
+
             </div>
 
-        </div>
-    )
-}
+        </section>
+    );
+};
 
-export default OurSpecs
+export default OurSpecs;

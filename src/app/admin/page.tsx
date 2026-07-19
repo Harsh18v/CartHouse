@@ -2,13 +2,11 @@
 import { dummyAdminDashboardData } from "@/assets/assets"
 import Loading from "@/components/Loading"
 import OrdersAreaChart from "@/components/OrdersAreaChart"
-import { formatIndianRupees } from "@/lib/currency"
 import { CircleDollarSignIcon, ShoppingBasketIcon, StoreIcon, TagsIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 
 export default function AdminDashboard() {
 
-    const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || '₹'
 
     const [loading, setLoading] = useState(true)
     const [dashboardData, setDashboardData] = useState<{ products: number; revenue: number; orders: number; stores: number; allOrders: any[] }>({
@@ -21,7 +19,7 @@ export default function AdminDashboard() {
 
     const dashboardCardsData = [
         { title: 'Total Products', value: dashboardData.products, icon: ShoppingBasketIcon },
-        { title: 'Total Revenue', value: formatIndianRupees(dashboardData.revenue), icon: CircleDollarSignIcon },
+        { title: 'Total Revenue', value: dashboardData.revenue, icon: CircleDollarSignIcon },
         { title: 'Total Orders', value: dashboardData.orders, icon: TagsIcon },
         { title: 'Total Stores', value: dashboardData.stores, icon: StoreIcon },
     ]

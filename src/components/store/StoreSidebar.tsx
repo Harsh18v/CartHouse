@@ -1,12 +1,34 @@
 'use client'
 import { usePathname } from "next/navigation"
 import { HomeIcon, LayoutListIcon, SquarePenIcon, SquarePlusIcon } from "lucide-react"
-import Image from "next/image"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 
-const StoreSidebar = ({ storeInfo }: { storeInfo?: { logo?: string; name?: string } }) => {
+const StoreSidebar = () => {
 
     const pathname = usePathname()
+    const router = useRouter()
+
+    const handleLogout = async () => {
+        try {
+            const res = await fetch("/api/auth/logout", {
+                method: "POST",
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                alert(data.message);
+                return;
+            }
+
+            router.replace("/");
+            router.refresh(); // Refreshes the app so Navbar/Auth state updates
+        } catch (error) {
+            console.error(error);
+            alert("Something went wrong.");
+        }
+    };
 
     const sidebarLinks = [
         { name: 'Dashboard', href: '/store', icon: HomeIcon },
@@ -15,12 +37,10 @@ const StoreSidebar = ({ storeInfo }: { storeInfo?: { logo?: string; name?: strin
         { name: 'Orders', href: '/store/orders', icon: LayoutListIcon },
     ]
 
+
+
     return (
-        <div className="inline-flex h-full flex-col gap-5 border-r border-slate-200 sm:min-w-60">
-            <div className="flex flex-col gap-3 justify-center items-center pt-8 max-sm:hidden">
-                <Image className="w-14 h-14 rounded-full shadow-md" src={storeInfo?.logo} alt="" width={80} height={80} />
-                <p className="text-slate-700">{storeInfo?.name}</p>
-            </div>
+        <div className="inline-flex h-full flex-col gap-5 items-center border-r border-slate-200 sm:min-w-60">
 
             <div className="max-sm:mt-6">
                 {
@@ -32,6 +52,12 @@ const StoreSidebar = ({ storeInfo }: { storeInfo?: { logo?: string; name?: strin
                         </Link>
                     ))
                 }
+                <button
+                    onClick={handleLogout}
+                    className=" w-full px-4 py-2 mt-4 bg-red-500 text-white hover:bg-red-600 transition"
+                >
+                    Logout
+                </button>
             </div>
         </div>
     )

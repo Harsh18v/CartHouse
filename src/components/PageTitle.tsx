@@ -2,13 +2,13 @@
 import { ArrowRightIcon } from 'lucide-react'
 import Link from 'next/link'
 
-const PageTitle = ({ heading, text, path = "/", linkText }) => {
+const PageTitle = ({ heading, text, path = "/shop", linkText }) => {
     return (
         <div className="my-6">
-            <h2 className="text-2xl font-semibold">{heading}</h2>
-            <div className="flex items-center gap-3">
-                <p className="text-slate-600">{text}</p>
-                <Link href={path} className="flex items-center gap-1 text-green-500 text-sm">
+            <h2 className="text-2xl font-bold text-slate-800">{heading}</h2>
+            <div className="flex items-center gap-3 mt-1">
+                <p className="text-slate-500">{text}</p>
+                <Link href={path} className="flex items-center gap-1 text-indigo-600 hover:text-indigo-700 font-medium text-sm transition-colors">
                     {linkText} <ArrowRightIcon size={14} />
                 </Link>
             </div>

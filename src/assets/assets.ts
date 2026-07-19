@@ -1,4 +1,3 @@
-import gs_logo from "./gs_logo.jpg";
 import happy_store from "./happy_store.webp";
 import upload_area from "./upload_area.svg";
 import hero_model_img from "./hero_model_img.png";
@@ -24,7 +23,7 @@ import { ClockFadingIcon, HeadsetIcon, SendIcon, LucideIcon } from "lucide-react
 import profile_pic1 from "./profile_pic1.jpg";
 import profile_pic2 from "./profile_pic2.jpg";
 import profile_pic3 from "./profile_pic3.jpg";
-import { StaticImageData } from "next/image";
+import { StaticImageData } from "next/image?";
 
 
 export type ImageSrc = StaticImageData | string;
@@ -34,7 +33,7 @@ export interface User {
     id: string;
     name: string;
     email: string;
-    image: ImageSrc;
+    image?: ImageSrc;
     cart?: Record<string, number>;
 }
 
@@ -47,17 +46,17 @@ export interface Store {
     address: string;
     status: "approved" | "pending" | "rejected";
     isActive: boolean;
-    logo: ImageSrc;
+    logo?: ImageSrc;
     email: string;
     contact: string;
     createdAt: string;
     updatedAt: string;
-    user: User;
+    user?: User;
 }
 
 export interface RatingUser {
     name: string;
-    image: ImageSrc;
+    image?: ImageSrc;
 }
 
 export interface RatingProductRef {
@@ -191,7 +190,6 @@ export interface Assets {
     hero_model_img: ImageSrc;
     hero_product_img1: ImageSrc;
     hero_product_img2: ImageSrc;
-    gs_logo: ImageSrc;
     product_img1: ImageSrc;
     product_img2: ImageSrc;
     product_img3: ImageSrc;
@@ -215,7 +213,7 @@ export interface Assets {
 
 export const assets: Assets = {
     upload_area, hero_model_img,
-    hero_product_img1, hero_product_img2, gs_logo,
+    hero_product_img1, hero_product_img2,
     product_img1, product_img2, product_img3, product_img4, product_img5, product_img6,
     product_img7, product_img8, product_img9, product_img10, product_img11, product_img12,
     product_img13, product_img14, product_img15, product_img16,
@@ -248,12 +246,6 @@ export const dummyStoreData: Store = {
     contact: "+0 1234567890",
     createdAt: "2025-09-04T09:04:16.189Z",
     updatedAt: "2025-09-04T09:04:44.273Z",
-    user: {
-        id: "user_31dOriXqC4TATvc0brIhlYbwwc5",
-        name: "Great Stack",
-        email: "user.greatstack@gmail.com",
-        image: gs_logo,
-    },
 };
 
 export const productDummyData: Product[] = [
@@ -261,8 +253,8 @@ export const productDummyData: Product[] = [
         id: "prod_1",
         name: "Modern table lamp",
         description: "Modern table lamp with a sleek design. It's perfect for any room. It's made of high-quality materials and comes with a lifetime warranty. Enhance your audio experience with this earbuds. Indulge yourself in a world of pure sound with 50 hours of uninterrupted playtime. Equipped with the cutting-edge Zen Mode Tech ENC and BoomX Tech, prepare to be enthralled by a symphony of crystal-clear melodies.",
-        mrp: 40,
-        price: 29,
+        mrp: 2499,
+        price: 1999,
         images: [product_img1, product_img2, product_img3, product_img4],
         category: "Decoration",
         storeId: "seller_1",
@@ -276,8 +268,8 @@ export const productDummyData: Product[] = [
         id: "prod_2",
         name: "Smart speaker gray",
         description: "Smart speaker with a sleek design. It's perfect for any room. It's made of high-quality materials and comes with a lifetime warranty.",
-        mrp: 50,
-        price: 29,
+        mrp: 3299,
+        price: 2499,
         images: [product_img2],
         storeId: "seller_1",
         inStock: true,
@@ -291,8 +283,8 @@ export const productDummyData: Product[] = [
         id: "prod_3",
         name: "Smart watch white",
         description: "Smart watch with a sleek design. It's perfect for any room. It's made of high-quality materials and comes with a lifetime warranty.",
-        mrp: 60,
-        price: 29,
+        mrp: 1599,
+        price: 1299,
         images: [product_img3],
         storeId: "seller_1",
         inStock: true,
@@ -306,8 +298,8 @@ export const productDummyData: Product[] = [
         id: "prod_4",
         name: "Wireless headphones",
         description: "Wireless headphones with a sleek design. It's perfect for any room. It's made of high-quality materials and comes with a lifetime warranty.",
-        mrp: 70,
-        price: 29,
+        mrp: 3599,
+        price: 2599,
         images: [product_img4],
         storeId: "seller_1",
         inStock: true,
@@ -321,8 +313,8 @@ export const productDummyData: Product[] = [
         id: "prod_5",
         name: "Smart watch black",
         description: "Smart watch with a sleek design. It's perfect for any room. It's made of high-quality materials and comes with a lifetime warranty.",
-        mrp: 49,
-        price: 29,
+        mrp: 1899,
+        price: 1599,
         images: [product_img5],
         storeId: "seller_1",
         inStock: true,
@@ -336,8 +328,8 @@ export const productDummyData: Product[] = [
         id: "prod_6",
         name: "Security Camera",
         description: "Security Camera with a sleek design. It's perfect for any room. It's made of high-quality materials and comes with a lifetime warranty.",
-        mrp: 59,
-        price: 29,
+        mrp: 2599,
+        price: 1999,
         images: [product_img6],
         storeId: "seller_1",
         inStock: true,
@@ -351,8 +343,8 @@ export const productDummyData: Product[] = [
         id: "prod_7",
         name: "Smart Pen for iPad",
         description: "Smart Pen for iPad with a sleek design. It's perfect for any room. It's made of high-quality materials and comes with a lifetime warranty.",
-        mrp: 89,
-        price: 29,
+        mrp: 12999,
+        price: 11999,
         images: [product_img7],
         storeId: "seller_1",
         inStock: true,
@@ -366,8 +358,8 @@ export const productDummyData: Product[] = [
         id: "prod_8",
         name: "Home Theater",
         description: "Home Theater with a sleek design. It's perfect for any room. It's made of high-quality materials and comes with a lifetime warranty.",
-        mrp: 99,
-        price: 29,
+        mrp: 17999,
+        price: 15999,
         images: [product_img8],
         storeId: "seller_1",
         inStock: true,
@@ -381,8 +373,8 @@ export const productDummyData: Product[] = [
         id: "prod_9",
         name: "Apple Wireless Earbuds",
         description: "Apple Wireless Earbuds with a sleek design. It's perfect for any room. It's made of high-quality materials and comes with a lifetime warranty.",
-        mrp: 89,
-        price: 29,
+        mrp: 19999,
+        price: 17999,
         images: [product_img9],
         storeId: "seller_1",
         inStock: true,
@@ -396,8 +388,8 @@ export const productDummyData: Product[] = [
         id: "prod_10",
         name: "Apple Smart Watch",
         description: "Apple Smart Watch with a sleek design. It's perfect for any room. It's made of high-quality materials and comes with a lifetime warranty.",
-        mrp: 179,
-        price: 29,
+        mrp: 17999,
+        price: 15999,
         images: [product_img10],
         storeId: "seller_1",
         inStock: true,
@@ -411,8 +403,8 @@ export const productDummyData: Product[] = [
         id: "prod_11",
         name: "RGB Gaming Mouse",
         description: "RGB Gaming Mouse with a sleek design. It's perfect for any room. It's made of high-quality materials and comes with a lifetime warranty.",
-        mrp: 39,
-        price: 29,
+        mrp: 999,
+        price: 499,
         images: [product_img11],
         storeId: "seller_1",
         inStock: true,
@@ -426,8 +418,8 @@ export const productDummyData: Product[] = [
         id: "prod_12",
         name: "Smart Home Cleaner",
         description: "Smart Home Cleaner with a sleek design. It's perfect for any room. It's made of high-quality materials and comes with a lifetime warranty.",
-        mrp: 199,
-        price: 29,
+        mrp: 15999,
+        price: 14999,
         images: [product_img12],
         storeId: "seller_1",
         inStock: true,
@@ -469,9 +461,8 @@ export const couponDummyData: Coupon[] = [
 
 export const dummyUserData: User = {
     id: "user_31dQbH27HVtovbs13X2cmqefddM",
-    name: "GreatStack",
-    email: "greatstack@example.com",
-    image: gs_logo,
+    name: "Harsh",
+    email: "harsh@example.com",
     cart: {},
 };
 
@@ -523,13 +514,12 @@ export const storesDummyData: Store[] = [
     {
         id: "cmemkb98v0001tat8r1hiyxhn",
         userId: "user_31dOriXqC4TATvc0brIhlYbwwc5",
-        name: "GreatStack",
+        name: "Pune shop",
         description: "GreatStack is the education marketplace where you can buy goodies related to coding and tech",
         username: "greatstack",
         address: "123 Maplewood Drive Springfield, IL 62704 USA",
         status: "approved",
         isActive: true,
-        logo: gs_logo,
         email: "greatstack@example.com",
         contact: "+0 1234567890",
         createdAt: "2025-08-22T08:22:16.189Z",
@@ -555,10 +545,10 @@ export const storesDummyData: Store[] = [
 ];
 
 export const dummyAdminDashboardData: AdminDashboardData = {
-    orders: 6,
+    orders: 7,
     stores: 2,
-    products: 12,
-    revenue: "959.10",
+    products: 18,
+    revenue: "948.10",
     allOrders: [
         { createdAt: "2025-08-20T08:46:58.239Z", total: 145.6 },
         { createdAt: "2025-08-22T08:46:21.818Z", total: 97.2 },

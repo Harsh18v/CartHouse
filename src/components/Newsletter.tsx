@@ -1,15 +1,47 @@
-import React from 'react'
+'use client'
+
 import Title from './Title'
 
 const Newsletter = () => {
     return (
-        <div className='flex flex-col items-center mx-4 my-36'>
-            <Title title="Join Newsletter" description="Subscribe to get exclusive deals, new arrivals, and insider updates delivered straight to your inbox every week." visibleButton={false} />
-            <div className='flex bg-slate-100 text-sm p-1 rounded-full w-full max-w-xl my-10 border-2 border-white ring ring-slate-200'>
-                <input className='flex-1 pl-5 outline-none' type="text" placeholder='Enter your email address' />
-                <button className='font-medium bg-green-500 text-white px-7 py-3 rounded-full hover:scale-103 active:scale-95 transition'>Get Updates</button>
+        <section className="px-6 py-24">
+
+            <div className="max-w-4xl mx-auto rounded-[32px] border border-gray-200 bg-gray-50 p-8 md:p-14">
+
+                <div className="max-w-2xl mx-auto text-center">
+
+                    <Title
+                        visibleButton={false}
+                        title="Stay in the Loop"
+                        description="Subscribe to receive exclusive offers, new arrivals, product launches, and special discounts delivered directly to your inbox."
+                    />
+
+                    <form className="mt-10 flex flex-col gap-4 sm:flex-row">
+
+                        <input
+                            type="email"
+                            placeholder="Enter your email address"
+                            className="h-14 flex-1 rounded-2xl border border-gray-300 bg-white px-5 text-gray-900 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                        />
+
+                        <button
+                            type="submit"
+                            className="h-14 rounded-2xl bg-indigo-600 px-8 font-medium text-white transition-all duration-300 hover:bg-indigo-700 hover:shadow-lg active:scale-[0.98]"
+                        >
+                            Subscribe
+                        </button>
+
+                    </form>
+
+                    <p className="mt-5 text-sm text-gray-500">
+                        No spam. Unsubscribe anytime.
+                    </p>
+
+                </div>
+
             </div>
-        </div>
+
+        </section>
     )
 }
 

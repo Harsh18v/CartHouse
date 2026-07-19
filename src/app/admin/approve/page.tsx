@@ -1,5 +1,5 @@
 'use client'
-import { storesDummyData } from "@/assets/assets"
+import { storesDummyData, type Store } from "@/assets/assets"
 import StoreInfo from "@/components/admin/StoreInfo"
 import Loading from "@/components/Loading"
 import { useEffect, useState } from "react"
@@ -7,7 +7,7 @@ import toast from "react-hot-toast"
 
 export default function AdminApprove() {
 
-    const [stores, setStores] = useState([])
+    const [stores, setStores] = useState<Store[]>([])
     const [loading, setLoading] = useState(true)
 
 
@@ -16,7 +16,7 @@ export default function AdminApprove() {
         setLoading(false)
     }
 
-    const handleApprove = async ({ storeId, status }) => {
+    const handleApprove = async ({ storeId, status }: { storeId: string; status: string }) => {
         // Logic to approve a store
 
 
@@ -32,7 +32,7 @@ export default function AdminApprove() {
 
             {stores.length ? (
                 <div className="flex flex-col gap-4 mt-4">
-                    {stores.map((store) => (
+                    {stores.map((store: Store) => (
                         <div key={store.id} className="bg-white border rounded-lg shadow-sm p-6 flex max-md:flex-col gap-4 md:items-end max-w-4xl" >
                             {/* Store Info */}
                             <StoreInfo store={store} />

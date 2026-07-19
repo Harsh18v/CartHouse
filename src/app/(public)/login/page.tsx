@@ -15,7 +15,7 @@ export default function AuthPage() {
     });
     const router = useRouter()
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
@@ -37,14 +37,22 @@ export default function AuthPage() {
                 alert(data.message);
                 return;
             }
-            alert(data.message);
+
             setFormData({
                 name: "",
                 email: "",
                 password: "",
             });
 
-            router.push("/");
+            router.refresh();
+
+            if (data.user.role === "admin") {
+                router.push("/admin");
+            } else if (data.user.role === "seller") {
+                router.push("/store");
+            } else {
+                router.push("/")
+            }
 
         } catch (error) {
             console.error(error);

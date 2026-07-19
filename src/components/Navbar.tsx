@@ -1,90 +1,172 @@
 'use client'
-import { Search, ShoppingCart } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+
+import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
+import { Search, ShoppingBag, ShoppingCart } from 'lucide-react'
+import { FormEvent, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { ArrowBigRight } from 'lucide-react'
+import toast from 'react-hot-toast'
+import NavbarSearch from './NavbarSearch'
+
+interface RootState {
+    cart: {
+        total: number
+    }
+}
 
 const Navbar = () => {
-
-    const router = useRouter();
+    const router = useRouter()
+    const pathname = usePathname()
 
     const [search, setSearch] = useState('')
-    const [user, setUser] = useState("")
-    const cartCount = useSelector((state: any) => state.cart.total)
+    const [user, setUser] = useState<string | null>(null)
 
-    const handleSearch = (e) => {
+    const cartCount = useSelector(
+        (state: RootState) => state.cart.total
+    )
+
+    const handleSearch = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        router.push(`/shop?search=${search}`)
+
+        if (!search.trim()) return
+
+        router.push(`/shop?search=${encodeURIComponent(search)}`)
+    }
+
+    const handleLogout = async () => {
+        try {
+            const res = await fetch("/api/auth/logout", {
+                method: "POST",
+                credentials: "include",
+            });
+
+            if (!res.ok) {
+                throw new Error("Logout failed");
+            }
+
+            toast.success("Logged out successfully");
+            setUser(null);
+            router.push("/");
+            router.refresh();
+        } catch (err: any) {
+            toast.error("Could not log out. Please try again.");
+        }
+    };
+
+    const getUser = async () => {
+        try {
+            const res = await fetch('/api/auth/get-me', { credentials: 'include' })
+
+            if (!res.ok) {
+                setUser(null)
+                return
+            }
+
+            const data = await res.json()
+            setUser(data.user?.name || null)
+
+        } catch (error) {
+            console.error(error)
+            setUser(null)
+        }
     }
 
     useEffect(() => {
-        async function getUser() {
-            const res = await fetch("/api/auth/get-me");
-            if (!res.ok) return;
-            const data = await res.json();
-            setUser(data.user.name);
-        }
-        getUser();
-    }, []);
+        getUser()
+    }, [pathname])
 
     return (
-        <nav className="relative bg-white">
-            <div className="mx-6">
-                <div className="flex items-center justify-between max-w-7xl mx-auto py-4  transition-all">
+        <>
+            <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/90 backdrop-blur">
+                <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
 
-                    <Link href="/" className="relative text-4xl font-semibold text-slate-700">
-                        <span className="text-green-600">Next</span>Cart
+                    {/* Logo */}
+                    <Link
+                        href="/"
+                        className="flex items-center gap-2"
+                    >
+                        <ShoppingBag
+                            size={28}
+                            className="text-indigo-600"
+                        />
+                        <span className="text-2xl font-bold tracking-tight text-gray-900">
+                            Cart<span className="text-indigo-600">House</span>
+                        </span>
                     </Link>
 
-                    {/* Desktop Menu */}
-                    <div className="hidden sm:flex items-center gap-4 lg:gap-8 text-slate-600">
-                        <Link href="/">Home</Link>
-                        <Link href="/shop">Shop</Link>
-                        <Link href="/">About</Link>
-                        <Link href="/">Contact</Link>
-
-                        <form onSubmit={handleSearch} className="hidden xl:flex items-center w-xs text-sm gap-2 bg-slate-100 px-4 py-3 rounded-full">
-                            <Search size={18} className="text-slate-600" />
-                            <input className="w-full bg-transparent outline-none placeholder-slate-600" type="text" placeholder="Search products" value={search} onChange={(e) => setSearch(e.target.value)} required />
-                        </form>
-
-                        <Link href="/cart" className="relative flex items-center gap-2 text-slate-600">
-                            <ShoppingCart size={18} />
-                            Cart
-                            <button className="absolute -top-1 left-3 text-[8px] text-white bg-slate-600 size-3.5 rounded-full">{cartCount}</button>
+                    {/* Navigation */}
+                    <nav className="hidden items-center gap-8 lg:flex">
+                        <Link
+                            href="/"
+                            className="font-medium text-gray-600 transition hover:text-indigo-600"
+                        >
+                            Home
                         </Link>
+                        <Link
+                            href="/shop"
+                            className="font-medium text-gray-600 transition hover:text-indigo-600"
+                        >
+                            Shop
+                        </Link>
+                        <Link
+                            href="/about"
+                            className="font-medium text-gray-600 transition hover:text-indigo-600"
+                        >
+                            About
+                        </Link>
+                        <Link
+                            href="/contact"
+                            className="font-medium text-gray-600 transition hover:text-indigo-600"
+                        >
+                            Contact
+                        </Link>
+                    </nav>
 
-                        {
-                            user ? (
+                    {/* Right Side */}
+
+                    <div className="flex items-center gap-4">
+
+                        {/* Search */}
+                        <NavbarSearch />
+                        {/* Cart */}
+                        <Link
+                            href="/cart"
+                            className="relative rounded-xl border border-gray-200 p-3 transition hover:border-indigo-300 hover:bg-indigo-50"
+                        >
+                            <ShoppingCart size={22} />
+                            {cartCount > 0 && (
+                                <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 text-[11px] font-medium text-white">
+                                    {cartCount}
+                                </span>
+                            )}
+                        </Link>
+                        {/* Login */}
+                        {user ? (
+                            <div className='flex items-center gap-1'>
                                 <Link
                                     href="/account"
-                                    className="px-8 py-2 bg-indigo-500 hover:bg-indigo-600 transition text-white rounded-full">
-                                    Hello, {user}
+                                    className="rounded-xl bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700"
+                                >
+                                    Hi, {user}
                                 </Link>
-                            ) : (
-                                <Link
-                                    href="/login"
-                                    className="px-8 py-2 bg-indigo-500 hover:bg-indigo-600 transition text-white rounded-full">
-                                    Login
-                                </Link>
-                            )
-                        }
+                                <button onClick={handleLogout} className=" bg-red-500  px-2 py-3 text-sm font-medium rounded-xl text-white ">
+                                    <ArrowBigRight className="w-5 h-5" />
+                                </button>
+                            </div>
 
-
-
-                    </div>
-
-                    {/* Mobile User Button  */}
-                    <div className="sm:hidden">
-                        <button className="px-7 py-1.5 bg-indigo-500 hover:bg-indigo-600 text-sm transition text-white rounded-full">
-                            Login
-                        </button>
+                        ) : (
+                            <Link
+                                href="/login"
+                                className="rounded-xl border border-gray-300 px-5 py-3 text-sm font-medium text-gray-700 transition hover:border-indigo-600 hover:text-indigo-600"
+                            >
+                                Login
+                            </Link>
+                        )}
                     </div>
                 </div>
-            </div>
-            <hr className="border-gray-300" />
-        </nav>
+            </header>
+        </>
     )
 }
 
