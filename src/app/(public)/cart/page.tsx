@@ -4,17 +4,20 @@ import Counter from "@/components/Counter";
 import OrderSummary from "@/components/OrderSummary";
 import PageTitle from "@/components/PageTitle";
 import { deleteItemFromCart } from "@/lib/features/cart/cartSlice";
-import { formatIndianRupees } from "@/lib/currency";
 import { Link, Trash2Icon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+
 
 interface CartItem extends Product {
     quantity: number;
 }
 
 export default function Cart() {
+
+    const { data: user } = useSelector((state: any) => state.user);
 
     const { cartItems } = useSelector((state: any) => state.cart);
     const products = useSelector((state: any) => state.product.list);
@@ -57,6 +60,12 @@ export default function Cart() {
                 {/* Title */}
                 <PageTitle heading="My Cart" text="items in your cart" linkText="Add more" />
 
+                {user && (
+                    <p className="text-sm text-slate-500 mt-4 mb-6">
+                        Cart for <span className="font-medium text-indigo-600">{user.name}</span>
+                    </p>
+                )}
+
                 <div className="flex items-start justify-between gap-6 max-lg:flex-col mt-6">
 
                     {/* Cart items */}
@@ -96,7 +105,7 @@ export default function Cart() {
 
                                         {/* Total price */}
                                         <div className="text-left md:text-center font-semibold text-slate-800">
-                                            {formatIndianRupees(item.price * item.quantity)}
+                                            {item.price * item.quantity}
                                         </div>
 
                                         {/* Remove */}

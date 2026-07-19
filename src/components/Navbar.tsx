@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Search, ShoppingBag, ShoppingCart } from 'lucide-react'
+import { ShoppingBag, ShoppingCart, Menu, X } from 'lucide-react'
 import { FormEvent, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { ArrowBigRight } from 'lucide-react'
@@ -21,6 +21,7 @@ const Navbar = () => {
 
     const [search, setSearch] = useState('')
     const [user, setUser] = useState<string | null>(null)
+    const [mobileOpen, setMobileOpen] = useState(false)
 
     const cartCount = useSelector(
         (state: RootState) => state.cart.total
@@ -127,8 +128,19 @@ const Navbar = () => {
 
                     <div className="flex items-center gap-4">
 
-                        {/* Search */}
-                        <NavbarSearch />
+                        {/* Mobile menu toggle */}
+                        <button
+                            onClick={() => setMobileOpen((v) => !v)}
+                            className="inline-flex items-center justify-center rounded-md p-2 hover:bg-gray-100 lg:hidden"
+                            aria-label="Toggle menu"
+                        >
+                            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+                        </button>
+
+                        {/* Search (hidden on very small screens) */}
+                        <div className="hidden sm:block">
+                            <NavbarSearch />
+                        </div>
                         {/* Cart */}
                         <Link
                             href="/cart"
@@ -141,30 +153,58 @@ const Navbar = () => {
                                 </span>
                             )}
                         </Link>
-                        {/* Login */}
-                        {user ? (
-                            <div className='flex items-center gap-1'>
-                                <Link
-                                    href="/account"
-                                    className="rounded-xl bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700"
-                                >
-                                    Hi, {user}
-                                </Link>
-                                <button onClick={handleLogout} className=" bg-red-500  px-2 py-3 text-sm font-medium rounded-xl text-white ">
-                                    <ArrowBigRight className="w-5 h-5" />
-                                </button>
-                            </div>
 
-                        ) : (
-                            <Link
-                                href="/login"
-                                className="rounded-xl border border-gray-300 px-5 py-3 text-sm font-medium text-gray-700 transition hover:border-indigo-600 hover:text-indigo-600"
-                            >
-                                Login
-                            </Link>
-                        )}
+                        {/* Login / Account (hidden on small screens; available in mobile menu) */}
+                        <div className="hidden lg:flex items-center gap-1">
+                            {user ? (
+                                <>
+                                    <Link
+                                        href="/account"
+                                        className="rounded-xl bg-indigo-600 px-4 sm:px-5 sm:w-28 py-2 sm:py-3 text-sm font-medium text-white transition hover:bg-indigo-700 text-center"
+                                    >
+                                        Hi, {user}
+                                    </Link>
+                                    <button onClick={handleLogout} className="bg-red-500 px-2 py-3 text-sm font-medium rounded-xl text-white">
+                                        <ArrowBigRight className="w-5 h-5" />
+                                    </button>
+                                </>
+                            ) : (
+                                <Link
+                                    href="/login"
+                                    className="rounded-xl border border-gray-300 px-4 sm:px-5 py-2 sm:py-3 text-sm font-medium text-gray-700 transition hover:border-indigo-600 hover:text-indigo-600"
+                                >
+                                    Login
+                                </Link>
+                            )}
+                        </div>
                     </div>
                 </div>
+                {/* Mobile menu panel */}
+                {mobileOpen && (
+                    <div className="lg:hidden absolute left-0 right-0 top-full z-40 border-t border-gray-200 bg-white shadow-sm">
+                        <div className="max-w-7xl mx-auto px-4 py-4">
+                            <div className="space-y-3">
+                                <NavbarSearch className="relative w-full" />
+                                <nav className="flex flex-col gap-2">
+                                    <Link href="/" className="py-2 font-medium text-gray-700">Home</Link>
+                                    <Link href="/shop" className="py-2 font-medium text-gray-700">Shop</Link>
+                                    <Link href="/about" className="py-2 font-medium text-gray-700">About</Link>
+                                    <Link href="/contact" className="py-2 font-medium text-gray-700">Contact</Link>
+                                </nav>
+                                <div className="pt-2 border-t border-gray-100">
+                                    {user ? (
+                                        <div className="flex items-center gap-2">
+                                            <Link href="/account" className="flex-1 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white text-center">Account</Link>
+                                            <button onClick={handleLogout} className="rounded-lg bg-red-500 px-3 py-2 text-white">Logout</button>
+                                        </div>
+                                    ) : (
+                                        <Link href="/login" className="block rounded-lg border border-gray-300 px-4 py-2 text-center font-medium text-gray-700">Login</Link>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </header>
         </>
     )

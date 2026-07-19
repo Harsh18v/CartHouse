@@ -7,8 +7,6 @@ import { useRouter } from 'next/navigation';
 
 const OrderSummary = ({ totalPrice, items }) => {
 
-    const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || '₹';
-
     const router = useRouter();
 
     const addressList = useSelector((state: any) => state.address.list);
@@ -99,7 +97,7 @@ const OrderSummary = ({ totalPrice, items }) => {
             </div>
             <div className='flex justify-between py-4'>
                 <p className='font-medium text-slate-700'>Total:</p>
-                <p className='font-semibold text-right text-slate-800 text-base'>{coupon ? formatIndianRupees(totalPrice - (coupon.discount / 100 * totalPrice)) : formatIndianRupees(totalPrice)}</p>
+                <p className='font-semibold text-right text-slate-800 text-base'>{coupon ? totalPrice - (coupon.discount / 100 * totalPrice) : totalPrice}</p>
             </div>
             <button onClick={e => toast.promise(handlePlaceOrder(e), { loading: 'placing Order...' })} className='w-full bg-indigo-600 text-white py-2.5 rounded-full font-medium hover:bg-indigo-700 active:scale-95 transition-all'>Place Order</button>
 

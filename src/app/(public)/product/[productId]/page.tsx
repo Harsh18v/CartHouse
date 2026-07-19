@@ -12,6 +12,7 @@ export default function Product() {
     const [product, setProduct] = useState<any>(null);
     const products = useSelector((state: any) => state.product.list);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchProduct = async () => {
         const product = products.find((product: Product) => product.id === productId);
         setProduct(product);
@@ -22,7 +23,7 @@ export default function Product() {
             fetchProduct()
         }
         scrollTo(0, 0)
-    }, [productId, products]);
+    }, [fetchProduct, productId, products]);
 
     return (
         <div className="mx-6">

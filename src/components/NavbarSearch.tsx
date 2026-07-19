@@ -3,7 +3,11 @@ import { SearchIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const NavbarSearch = () => {
+type Props = {
+    className?: string
+}
+
+const NavbarSearch = ({ className }: Props) => {
     const router = useRouter();
     const [search, setSearch] = useState("");
 
@@ -16,7 +20,7 @@ const NavbarSearch = () => {
     };
 
     return (
-        <form onSubmit={handleSearch} className="relative w-full max-w-xs">
+        <form onSubmit={handleSearch} className={className ?? "relative w-full max-w-xs"}>
             <SearchIcon
                 size={16}
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"

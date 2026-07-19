@@ -56,7 +56,7 @@ const Hero = () => {
 
                     {/* Right Cards */}
                     <div className="flex flex-col gap-6">
-                        <div className="group flex items-center justify-between rounded-[28px] border border-gray-200 bg-gray-50 p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                        <div onClick={() => router.push("/shop")} className="group flex items-center justify-between rounded-[28px] border border-gray-200 bg-gray-50 p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-md cursor-pointer">
                             <div>
                                 <p className="text-sm font-medium uppercase tracking-wide text-indigo-600">
                                     Featured
@@ -80,7 +80,7 @@ const Hero = () => {
                                 className="w-36 object-contain"
                             />
                         </div>
-                        <div className="group flex items-center justify-between rounded-[28px] border border-gray-200 bg-indigo-50 p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                        <div onClick={() => router.push("/shop")} className="group flex items-center justify-between rounded-[28px] border border-gray-200 bg-indigo-50 p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
                             <div>
                                 <p className="text-sm font-medium uppercase tracking-wide text-indigo-600">
                                     Limited Offer

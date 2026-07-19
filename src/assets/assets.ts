@@ -1,6 +1,6 @@
 import happy_store from "./happy_store.webp";
 import upload_area from "./upload_area.svg";
-import hero_model_img from "./hero_model_img.png";
+import hero_model_img from "./hero_model_img.jpg";
 import hero_product_img1 from "./hero_product_img1.png";
 import hero_product_img2 from "./hero_product_img2.png";
 import product_img1 from "./product_img1.png";
@@ -23,7 +23,7 @@ import { ClockFadingIcon, HeadsetIcon, SendIcon, LucideIcon } from "lucide-react
 import profile_pic1 from "./profile_pic1.jpg";
 import profile_pic2 from "./profile_pic2.jpg";
 import profile_pic3 from "./profile_pic3.jpg";
-import { StaticImageData } from "next/image?";
+import { StaticImageData } from "next/image";
 
 
 export type ImageSrc = StaticImageData | string;
@@ -311,7 +311,7 @@ export const productDummyData: Product[] = [
     },
     {
         id: "prod_5",
-        name: "Smart watch black",
+        name: "Boat speakers 1000r",
         description: "Smart watch with a sleek design. It's perfect for any room. It's made of high-quality materials and comes with a lifetime warranty.",
         mrp: 1899,
         price: 1599,
