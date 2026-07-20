@@ -19,8 +19,8 @@ const Footer = () => {
         {
             title: "PRODUCTS",
             links: [
-                { text: "Earphones", path: '/shop', icon: null },
-                { text: "Headphones", path: '/shop', icon: null },
+                { text: "Earphones", path: '/shop?search=earbud', icon: null },
+                { text: "Headphones", path: '//shop?search=earbud', icon: null },
                 { text: "Smartphones", path: '/shop', icon: null },
                 { text: "Laptops", path: '/shop', icon: null },
             ]

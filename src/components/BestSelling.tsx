@@ -4,13 +4,7 @@ import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import ProductCard from './ProductCard'
 import Title from './Title'
-
-interface Product {
-    _id: string
-    createdAt: string
-    rating: any[]
-    [key: string]: any
-}
+import type { Product } from '@/assets/assets'
 
 interface RootState {
     product: {

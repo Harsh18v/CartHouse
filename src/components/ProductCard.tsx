@@ -2,18 +2,7 @@
 import { StarIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-
-interface Rating {
-    rating: number
-}
-
-interface Product {
-    id: string
-    name: string
-    price: number
-    images: string[]
-    rating: Rating[]
-}
+import type { Product } from '@/assets/assets'
 
 interface ProductCardProps {
     product: Product

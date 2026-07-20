@@ -5,14 +5,12 @@ import Link from "next/link"
 import { ArrowRightIcon } from "lucide-react"
 import SellerNavbar from "./StoreNavbar"
 import SellerSidebar from "./StoreSidebar"
-import { dummyStoreData } from "@/assets/assets"
 
-const StoreLayout = ({ children }) => {
+const StoreLayout = ({ children }: { children: React.ReactNode }) => {
 
 
     const [isSeller, setIsSeller] = useState(false)
     const [loading, setLoading] = useState(true)
-    const [storeInfo, setStoreInfo] = useState(null)
 
     const fetchIsSeller = async () => {
         try {
@@ -28,7 +26,6 @@ const StoreLayout = ({ children }) => {
             }
 
             setIsSeller(true);
-            setStoreInfo(dummyStoreData);
 
         } catch (error) {
             console.error(error);
@@ -49,7 +46,7 @@ const StoreLayout = ({ children }) => {
         <div className="flex flex-col h-screen">
             <SellerNavbar />
             <div className="flex flex-1 items-start h-full overflow-y-scroll no-scrollbar">
-                <SellerSidebar storeInfo={storeInfo} />
+                <SellerSidebar />
                 <div className="flex-1 h-full p-5 lg:pl-12 lg:pt-12 overflow-y-scroll">
                     {children}
                 </div>
