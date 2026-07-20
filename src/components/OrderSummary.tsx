@@ -5,17 +5,38 @@ import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
-const OrderSummary = ({ totalPrice, items }) => {
+interface Address {
+    name: string
+    city: string
+    state: string
+    zip: string
+    street?: string
+    country?: string
+    phone?: string
+}
+
+interface Coupon {
+    code: string
+    description: string
+    discount: number
+}
+
+interface OrderSummaryProps {
+    totalPrice: number
+    items: any[]
+}
+
+const OrderSummary = ({ totalPrice, items }: OrderSummaryProps) => {
 
     const router = useRouter();
 
-    const addressList = useSelector((state: any) => state.address.list);
+    const addressList = useSelector((state: { address: { list: Address[] } }) => state.address.list);
 
-    const [paymentMethod, setPaymentMethod] = useState('COD');
-    const [selectedAddress, setSelectedAddress] = useState(null);
+    const [paymentMethod, setPaymentMethod] = useState<'COD' | 'STRIPE'>('COD');
+    const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
     const [showAddressModal, setShowAddressModal] = useState(false);
     const [couponCodeInput, setCouponCodeInput] = useState('');
-    const [coupon, setCoupon] = useState<any>('');
+    const [coupon, setCoupon] = useState<Coupon | null>(null);
 
     const handleCouponCode = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -29,7 +50,7 @@ const OrderSummary = ({ totalPrice, items }) => {
     }
 
     return (
-        <div className='w-full max-w-lg lg:max-w-[340px] bg-white border border-slate-100 shadow-sm text-slate-500 text-sm rounded-2xl p-7'>
+        <div className='w-full max-w-lg lg:max-w-85 bg-white border border-slate-100 shadow-sm text-slate-500 text-sm rounded-2xl p-7'>
             <h2 className='text-xl font-semibold text-slate-800'>Payment Summary</h2>
             <p className='text-slate-400 text-xs mt-4 mb-2 uppercase tracking-wide font-medium'>Payment Method</p>
             <div className='flex gap-2 items-center'>
@@ -52,7 +73,7 @@ const OrderSummary = ({ totalPrice, items }) => {
                         <div>
                             {
                                 addressList.length > 0 && (
-                                    <select className='border border-slate-200 p-2 w-full my-3 outline-none rounded-lg focus:border-indigo-400 text-slate-600' onChange={(e) => setSelectedAddress(addressList[e.target.value])} >
+                                    <select className='border border-slate-200 p-2 w-full my-3 outline-none rounded-lg focus:border-indigo-400 text-slate-600' onChange={(e) => setSelectedAddress(addressList[Number(e.target.value)])} >
                                         <option value="">Select Address</option>
                                         {
                                             addressList.map((address, index) => (
@@ -90,7 +111,7 @@ const OrderSummary = ({ totalPrice, items }) => {
                         <div className='w-full flex items-center justify-center gap-2 text-xs mt-2 bg-indigo-50 rounded-lg py-2'>
                             <p>Code: <span className='font-semibold ml-1 text-indigo-600'>{coupon.code.toUpperCase()}</span></p>
                             <p>{coupon.description}</p>
-                            <XIcon size={18} onClick={() => setCoupon('')} className='hover:text-red-600 transition cursor-pointer' />
+                            <XIcon size={18} onClick={() => setCoupon(null)} className='hover:text-red-600 transition cursor-pointer' />
                         </div>
                     )
                 }

@@ -3,11 +3,28 @@ import { StarIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
+interface Rating {
+    rating: number
+}
 
-const ProductCard = ({ product }) => {
+interface Product {
+    id: string
+    name: string
+    price: number
+    images: string[]
+    rating: Rating[]
+}
+
+interface ProductCardProps {
+    product: Product
+}
+
+const ProductCard = ({ product }: ProductCardProps) => {
 
     // calculate the average rating of the product
-    const rating = Math.round(product.rating.reduce((acc, curr) => acc + curr.rating, 0) / product.rating.length);
+    const rating = product.rating.length > 0
+        ? Math.round(product.rating.reduce((acc, curr) => acc + curr.rating, 0) / product.rating.length)
+        : 0;
 
     return (
         <Link href={`/product/${product.id}`} className='group max-xl:mx-auto w-full sm:w-60 border p-2 rounded-2xl border-slate-200'>

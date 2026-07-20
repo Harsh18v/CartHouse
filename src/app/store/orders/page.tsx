@@ -1,28 +1,27 @@
 'use client'
 import { useEffect, useState } from "react"
 import Loading from "@/components/Loading"
-import { orderDummyData } from "@/assets/assets"
-import { formatIndianRupees } from "@/lib/currency"
+import { orderDummyData, type Order } from "@/assets/assets"
 
 export default function StoreOrders() {
-    const [orders, setOrders] = useState([])
+    const [orders, setOrders] = useState<Order[]>([])
     const [loading, setLoading] = useState(true)
-    const [selectedOrder, setSelectedOrder] = useState(null)
+    const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
 
 
     const fetchOrders = async () => {
-       setOrders(orderDummyData)
-       setLoading(false)
+        setOrders(orderDummyData)
+        setLoading(false)
     }
 
-    const updateOrderStatus = async (orderId, status) => {
+    const updateOrderStatus = async (orderId: string, status: string) => {
         // Logic to update the status of an order
 
 
     }
 
-    const openModal = (order) => {
+    const openModal = (order: Order) => {
         setSelectedOrder(order)
         setIsModalOpen(true)
     }
@@ -64,12 +63,12 @@ export default function StoreOrders() {
                                         {index + 1}
                                     </td>
                                     <td className="px-4 py-3">{order.user?.name}</td>
-                                    <td className="px-4 py-3 font-medium text-slate-800">{formatIndianRupees(order.total)}</td>
+                                    <td className="px-4 py-3 font-medium text-slate-800">{order.total}</td>
                                     <td className="px-4 py-3">{order.paymentMethod}</td>
                                     <td className="px-4 py-3">
                                         {order.isCouponUsed ? (
                                             <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">
-                                                {order.coupon?.code}
+                                                {order.coupon && typeof order.coupon === "object" && "code" in order.coupon ? order.coupon.code : "—"}
                                             </span>
                                         ) : (
                                             "—"
@@ -118,20 +117,25 @@ export default function StoreOrders() {
                         <div className="mb-4">
                             <h3 className="font-semibold mb-2">Products</h3>
                             <div className="space-y-2">
-                                {selectedOrder.orderItems.map((item, i) => (
-                                    <div key={i} className="flex items-center gap-4 border border-slate-100 shadow rounded p-2">
-                                        <img
-                                            src={item.product.images?.[0].src || item.product.images?.[0]}
-                                            alt={item.product?.name}
-                                            className="w-16 h-16 object-cover rounded"
-                                        />
+                                {selectedOrder.orderItems.map((item, i) => {
+                                    const productImage = item.product.images?.[0]
+                                    const imageSrc = typeof productImage === "string" ? productImage : productImage?.src
+
+                                    return (
+                                        <div key={i} className="flex items-center gap-4 border border-slate-100 shadow rounded p-2">
+                                            <img
+                                                src={imageSrc || ""}
+                                                alt={item.product?.name}
+                                                className="w-16 h-16 object-cover rounded"
+                                            />
                                         <div className="flex-1">
                                             <p className="text-slate-800">{item.product?.name}</p>
                                             <p>Qty: {item.quantity}</p>
-                                            <p>Price: {formatIndianRupees(item.price)}</p>
+                                            <p>Price: {item.price}</p>
                                         </div>
                                     </div>
-                                ))}
+                                    )
+                                })}
                             </div>
                         </div>
 
@@ -140,7 +144,7 @@ export default function StoreOrders() {
                             <p><span className="text-green-700">Payment Method:</span> {selectedOrder.paymentMethod}</p>
                             <p><span className="text-green-700">Paid:</span> {selectedOrder.isPaid ? "Yes" : "No"}</p>
                             {selectedOrder.isCouponUsed && (
-                                <p><span className="text-green-700">Coupon:</span> {selectedOrder.coupon.code} ({selectedOrder.coupon.discount}% off)</p>
+                                <p><span className="text-green-700">Coupon:</span> {selectedOrder.coupon && typeof selectedOrder.coupon === "object" && "code" in selectedOrder.coupon ? selectedOrder.coupon.code : "—"} ({selectedOrder.coupon && typeof selectedOrder.coupon === "object" && "discount" in selectedOrder.coupon ? selectedOrder.coupon.discount : 0}% off)</p>
                             )}
                             <p><span className="text-green-700">Status:</span> {selectedOrder.status}</p>
                             <p><span className="text-green-700">Order Date:</span> {new Date(selectedOrder.createdAt).toLocaleString()}</p>

@@ -3,29 +3,24 @@ import { useEffect, useState } from "react"
 import { toast } from "react-hot-toast"
 import Image from "next/image"
 import Loading from "@/components/Loading"
-import { productDummyData } from "@/assets/assets"
-import { formatIndianRupees } from "@/lib/currency"
+import { productDummyData, type Product } from "@/assets/assets"
 
 export default function StoreManageProducts() {
 
-    const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || '₹'
-
     const [loading, setLoading] = useState(true)
-    const [products, setProducts] = useState([])
+    const [products, setProducts] = useState<Product[]>([])
 
     const fetchProducts = async () => {
         setProducts(productDummyData)
         setLoading(false)
     }
 
-    const toggleStock = async (productId) => {
+    const toggleStock = async (productId: string) => {
         // Logic to toggle the stock of a product
-
-
     }
 
     useEffect(() => {
-            fetchProducts()
+        fetchProducts()
     }, [])
 
     if (loading) return <Loading />
@@ -53,8 +48,8 @@ export default function StoreManageProducts() {
                                 </div>
                             </td>
                             <td className="px-4 py-3 max-w-md text-slate-600 hidden md:table-cell truncate">{product.description}</td>
-                            <td className="px-4 py-3 hidden md:table-cell">{formatIndianRupees(product.mrp)}</td>
-                            <td className="px-4 py-3">{formatIndianRupees(product.price)}</td>
+                            <td className="px-4 py-3 hidden md:table-cell">{product.mrp}</td>
+                            <td className="px-4 py-3">{product.price}</td>
                             <td className="px-4 py-3 text-center">
                                 <label className="relative inline-flex items-center cursor-pointer text-gray-900 gap-3">
                                     <input type="checkbox" className="sr-only peer" onChange={() => toast.promise(toggleStock(product.id), { loading: "Updating data..." })} checked={product.inStock} />

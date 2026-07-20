@@ -91,7 +91,7 @@ const Navbar = () => {
                             size={28}
                             className="text-indigo-600"
                         />
-                        <span className="text-2xl font-bold tracking-tight text-gray-900">
+                        <span className="text-3xl font-extrabold tracking-tight text-gray-900">
                             Cart<span className="text-indigo-600">House</span>
                         </span>
                     </Link>

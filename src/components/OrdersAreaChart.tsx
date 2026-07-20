@@ -1,17 +1,33 @@
 'use client'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
-export default function OrdersAreaChart({ allOrders }) {
+interface Order {
+    id: string
+    createdAt: string
+    total: number
+    status: string
+}
+
+interface OrdersAreaChartProps {
+    allOrders: Order[]
+}
+
+interface ChartDataPoint {
+    date: string
+    orders: number
+}
+
+export default function OrdersAreaChart({ allOrders }: OrdersAreaChartProps) {
 
     // Group orders by date
-    const ordersPerDay = allOrders.reduce((acc, order) => {
+    const ordersPerDay = allOrders.reduce<Record<string, number>>((acc, order) => {
         const date = new Date(order.createdAt).toISOString().split('T')[0] // format: YYYY-MM-DD
         acc[date] = (acc[date] || 0) + 1
         return acc
     }, {})
 
     // Convert to array for Recharts
-    const chartData = Object.entries(ordersPerDay).map(([date, count]) => ({
+    const chartData: ChartDataPoint[] = Object.entries(ordersPerDay).map(([date, count]) => ({
         date,
         orders: count
     }))
@@ -19,7 +35,7 @@ export default function OrdersAreaChart({ allOrders }) {
     return (
         <div className="w-full max-w-4xl h-75 text-xs">
             <h3 className="text-lg font-medium text-slate-800 mb-4 pt-2 text-right"> <span className='text-slate-500'>Orders /</span> Day</h3>
-            <ResponsiveContainer width="100%" height="100%"> 
+            <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="date" />

@@ -4,12 +4,20 @@ import { assets } from "@/assets/assets"
 import Image from "next/image"
 import { toast } from "react-hot-toast"
 
+interface ProductInfo {
+    name: string
+    description: string
+    mrp: number
+    price: number
+    category: string
+}
+
 export default function StoreAddProduct() {
 
     const categories = ['Electronics', 'Clothing', 'Home & Kitchen', 'Beauty & Health', 'Toys & Games', 'Sports & Outdoors', 'Books & Media', 'Food & Drink', 'Hobbies & Crafts', 'Others']
 
-    const [images, setImages] = useState({ 1: null, 2: null, 3: null, 4: null })
-    const [productInfo, setProductInfo] = useState({
+    const [images, setImages] = useState<{ [key: number]: File | null }>({ 1: null, 2: null, 3: null, 4: null })
+    const [productInfo, setProductInfo] = useState<ProductInfo>({
         name: "",
         description: "",
         mrp: 0,
@@ -19,14 +27,14 @@ export default function StoreAddProduct() {
     const [loading, setLoading] = useState(false)
 
 
-    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const target = e.target as HTMLInputElement
-        const name = target.name
-        let value: any = target.value
-        if (target.type === 'number') {
-            value = Number(target.value) || 0
-        }
-        setProductInfo({ ...productInfo, [name]: value })
+    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value, type } = e.target
+        const parsedValue = type === 'number' ? Number(value) || 0 : value
+        setProductInfo({ ...productInfo, [name]: parsedValue })
+    }
+
+    const onImageChangeHandler = (key: number, file: File | null) => {
+        setImages({ ...images, [key]: file })
     }
 
     const onSubmitHandler = async (e: React.FormEvent) => {
@@ -41,31 +49,48 @@ export default function StoreAddProduct() {
             <h1 className="text-2xl">Add New <span className="text-slate-800 font-medium">Products</span></h1>
             <p className="mt-7">Product Images</p>
 
-            <div className="flex gap-3 mt-4">
-                {Object.keys(images).map((key) => (
-                    <label key={key} htmlFor={`images${key}`}>
-                        <Image width={300} height={300} className='h-15 w-auto border border-slate-200 rounded cursor-pointer' src={images[key] ? URL.createObjectURL(images[key]) : assets.upload_area} alt="" />
-                        <input type="file" accept='image/*' id={`images${key}`} onChange={e => setImages({ ...images, [key]: e.target.files[0] })} hidden />
-                    </label>
-                ))}
+            <div className="flex gap-4 my-4">
+                {Object.keys(images).map((key) => {
+                    const numKey = Number(key)
+                    const file = images[numKey]
+                    return (
+                        <label key={key} className="cursor-pointer">
+                            <div className="size-20 border border-dashed border-slate-300 rounded-lg flex items-center justify-center overflow-hidden bg-slate-50">
+                                <Image
+                                    src={file ? URL.createObjectURL(file) : assets.upload_area}
+                                    alt=""
+                                    width={80}
+                                    height={80}
+                                    className="object-cover h-full w-full"
+                                />
+                            </div>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                hidden
+                                onChange={(e) => onImageChangeHandler(numKey, e.target.files?.[0] || null)}
+                            />
+                        </label>
+                    )
+                })}
             </div>
 
-            <label htmlFor="" className="flex flex-col gap-2 my-6 ">
+            <label className="flex flex-col gap-2 my-6">
                 Name
                 <input type="text" name="name" onChange={onChangeHandler} value={productInfo.name} placeholder="Enter product name" className="w-full max-w-sm p-2 px-4 outline-none border border-slate-200 rounded" required />
             </label>
 
-            <label htmlFor="" className="flex flex-col gap-2 my-6 ">
+            <label className="flex flex-col gap-2 my-6">
                 Description
                 <textarea name="description" onChange={onChangeHandler} value={productInfo.description} placeholder="Enter product description" rows={5} className="w-full max-w-sm p-2 px-4 outline-none border border-slate-200 rounded resize-none" required />
             </label>
 
             <div className="flex gap-5">
-                <label htmlFor="" className="flex flex-col gap-2 ">
+                <label className="flex flex-col gap-2">
                     Actual Price (₹)
                     <input type="number" name="mrp" onChange={onChangeHandler} value={productInfo.mrp} placeholder="0" className="w-full max-w-45 p-2 px-4 outline-none border border-slate-200 rounded resize-none" required />
                 </label>
-                <label htmlFor="" className="flex flex-col gap-2 ">
+                <label className="flex flex-col gap-2">
                     Offer Price (₹)
                     <input type="number" name="price" onChange={onChangeHandler} value={productInfo.price} placeholder="0" className="w-full max-w-45 p-2 px-4 outline-none border border-slate-200 rounded resize-none" required />
                 </label>

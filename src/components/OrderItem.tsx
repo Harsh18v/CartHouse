@@ -2,20 +2,24 @@
 import Image from "next/image";
 import { DotIcon } from "lucide-react";
 import { useSelector } from "react-redux";
-import { formatIndianRupees } from "@/lib/currency";
 import Rating from "./Rating";
 import { useState } from "react";
 import RatingModal from "./RatingModal";
+import type { Order, OrderItem as OrderItemType, Rating as RatingType } from "@/assets/assets";
 
-const OrderItem = ({ order }: { order: any }) => {
+interface OrderItemProps {
+    order: Order;
+}
 
-    const [ratingModal, setRatingModal] = useState(null);
+const OrderItem = ({ order }: OrderItemProps) => {
 
-    const { ratings } = useSelector((state: any) => state.rating);
+    const [ratingModal, setRatingModal] = useState<{ orderId: string; productId: string } | null>(null);
 
-    const statusStyles = order.status === 'confirmed'
+    const { ratings } = useSelector((state: { rating: { ratings: RatingType[] } }) => state.rating);
+
+    const statusStyles = order.status === 'ORDER_PLACED' || order.status === 'PROCESSING'
         ? 'text-yellow-600 bg-yellow-50'
-        : order.status === 'delivered'
+        : order.status === 'DELIVERED'
             ? 'text-green-600 bg-green-50'
             : 'text-indigo-600 bg-indigo-50';
 
@@ -24,30 +28,36 @@ const OrderItem = ({ order }: { order: any }) => {
             <tr className="text-sm">
                 <td className="text-left align-top">
                     <div className="flex flex-col gap-6">
-                        {order.orderItems.map((item, index) => (
-                            <div key={index} className="flex items-center gap-4">
-                                <div className="w-20 aspect-square bg-indigo-50 flex items-center justify-center rounded-xl shrink-0">
-                                    <Image
-                                        className="h-14 w-auto object-contain"
-                                        src={item.product.images[0]}
-                                        alt="product_img"
-                                        width={50}
-                                        height={50}
-                                    />
+                        {order.orderItems.map((item: OrderItemType, index: number) => {
+                            const existingRating = ratings.find(
+                                rating => order.id === rating.orderId && item.product.id === rating.productId
+                            );
+
+                            return (
+                                <div key={index} className="flex items-center gap-4">
+                                    <div className="w-20 aspect-square bg-indigo-50 flex items-center justify-center rounded-xl shrink-0">
+                                        <Image
+                                            className="h-14 w-auto object-contain"
+                                            src={item.product.images[0]}
+                                            alt="product_img"
+                                            width={50}
+                                            height={50}
+                                        />
+                                    </div>
+                                    <div className="flex flex-col justify-center text-sm">
+                                        <p className="font-semibold text-slate-800 text-base">{item.product.name}</p>
+                                        <p className="text-slate-500">{item.price} Qty : {item.quantity} </p>
+                                        <p className="mb-1 text-slate-400 text-xs">{new Date(order.createdAt).toDateString()}</p>
+                                        <div>
+                                            {existingRating
+                                                ? <Rating value={existingRating.rating} />
+                                                : <button onClick={() => setRatingModal({ orderId: order.id, productId: item.product.id })} className={`text-indigo-600 font-medium hover:bg-indigo-50 px-2 py-1 -ml-2 rounded-lg transition ${order.status !== "DELIVERED" && 'hidden'}`}>Rate Product</button>
+                                            }</div>
+                                        {ratingModal && <RatingModal ratingModal={ratingModal} setRatingModal={setRatingModal} />}
+                                    </div>
                                 </div>
-                                <div className="flex flex-col justify-center text-sm">
-                                    <p className="font-semibold text-slate-800 text-base">{item.product.name}</p>
-                                    <p className="text-slate-500">{item.price} Qty : {item.quantity} </p>
-                                    <p className="mb-1 text-slate-400 text-xs">{new Date(order.createdAt).toDateString()}</p>
-                                    <div>
-                                        {ratings.find(rating => order.id === rating.orderId && item.product.id === rating.productId)
-                                            ? <Rating value={ratings.find(rating => order.id === rating.orderId && item.product.id === rating.productId).rating} />
-                                            : <button onClick={() => setRatingModal({ orderId: order.id, productId: item.product.id })} className={`text-indigo-600 font-medium hover:bg-indigo-50 px-2 py-1 -ml-2 rounded-lg transition ${order.status !== "DELIVERED" && 'hidden'}`}>Rate Product</button>
-                                        }</div>
-                                    {ratingModal && <RatingModal ratingModal={ratingModal} setRatingModal={setRatingModal} />}
-                                </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </td>
 

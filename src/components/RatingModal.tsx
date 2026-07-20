@@ -5,18 +5,33 @@ import React, { useState } from 'react'
 import { XIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-const RatingModal = ({ ratingModal, setRatingModal }) => {
+interface RatingModalData {
+    orderId: string
+    productId: string
+}
+
+interface RatingModalProps {
+    ratingModal: RatingModalData | null
+    setRatingModal: React.Dispatch<React.SetStateAction<RatingModalData | null>>
+}
+
+const RatingModal = ({ ratingModal, setRatingModal }: RatingModalProps) => {
 
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState('');
 
     const handleSubmit = async () => {
-        if (rating < 0 || rating > 5) {
+        if (rating < 1 || rating > 5) {
             return toast('Please select a rating');
         }
         if (review.length < 5) {
             return toast('write a short review');
         }
+        if (!ratingModal) {
+            return toast('Something went wrong, please try again');
+        }
+
+        // submit rating using ratingModal.orderId and ratingModal.productId here
 
         setRatingModal(null);
     }

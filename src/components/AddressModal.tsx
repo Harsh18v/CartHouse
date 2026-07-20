@@ -3,7 +3,11 @@ import { XIcon } from "lucide-react"
 import { useState } from "react"
 import { toast } from "react-hot-toast"
 
-const AddressModal = ({ setShowAddressModal }) => {
+interface AddressModalProps {
+    setShowAddressModal: (show: boolean) => void
+}
+
+const AddressModal = ({ setShowAddressModal }: AddressModalProps) => {
 
     const [address, setAddress] = useState({
         name: '',
@@ -16,14 +20,14 @@ const AddressModal = ({ setShowAddressModal }) => {
         phone: ''
     })
 
-    const handleAddressChange = (e) => {
+    const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAddress({
             ...address,
             [e.target.name]: e.target.value
         })
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         setShowAddressModal(false)

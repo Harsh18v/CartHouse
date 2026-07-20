@@ -6,7 +6,7 @@ const Newsletter = () => {
     return (
         <section className="px-6 py-24">
 
-            <div className="max-w-4xl mx-auto rounded-[32px] border border-gray-200 bg-gray-50 p-8 md:p-14">
+            <div className="max-w-4xl mx-auto rounded-4xl border border-gray-200 bg-gray-50 p-8 md:p-14">
 
                 <div className="max-w-2xl mx-auto text-center">
 

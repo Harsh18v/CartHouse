@@ -2,7 +2,14 @@
 import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
-const Title = ({ title, description, visibleButton = true, href = '' }) => {
+interface TitleProps {
+    title: string
+    description: string
+    visibleButton?: boolean
+    href?: string
+}
+
+const Title = ({ title, description, visibleButton = true, href = '' }: TitleProps) => {
 
     return (
         <div className='flex flex-col items-center'>

@@ -6,7 +6,11 @@ import { ArrowRightIcon } from "lucide-react"
 import AdminNavbar from "./AdminNavbar"
 import AdminSidebar from "./AdminSidebar"
 
-const AdminLayout = ({ children }) => {
+interface AdminLayoutProps {
+    children: React.ReactNode
+}
+
+const AdminLayout = ({ children }: AdminLayoutProps) => {
     const [isAdmin, setIsAdmin] = useState(false)
     const [loading, setLoading] = useState(true)
 

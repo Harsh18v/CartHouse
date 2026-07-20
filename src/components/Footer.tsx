@@ -1,9 +1,21 @@
 import Link from "next/link";
 import { ShoppingBag } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+
+interface FooterLink {
+    text: string;
+    path: string;
+    icon?: LucideIcon | null;
+}
+
+interface FooterSection {
+    title: string;
+    links: FooterLink[];
+}
 
 const Footer = () => {
 
-    const linkSections = [
+    const linkSections: FooterSection[] = [
         {
             title: "PRODUCTS",
             links: [

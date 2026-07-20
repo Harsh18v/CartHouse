@@ -2,7 +2,14 @@
 import { ArrowRightIcon } from 'lucide-react'
 import Link from 'next/link'
 
-const PageTitle = ({ heading, text, path = "/shop", linkText }) => {
+interface PageTitleProps {
+    heading: string
+    text: string
+    path?: string
+    linkText: string
+}
+
+const PageTitle = ({ heading, text, path = "/shop", linkText }: PageTitleProps) => {
     return (
         <div className="my-6">
             <h2 className="text-2xl font-bold text-slate-800">{heading}</h2>
