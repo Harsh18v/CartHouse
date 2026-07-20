@@ -12,7 +12,7 @@ export default function CreateStore() {
     const [loading, setLoading] = useState(true)
     const [message, setMessage] = useState("")
 
-    const [storeInfo, setStoreInfo] = useState<{ name: string; username: string; description: string; email: string; contact: string; address: string; image: any }>({
+    const [storeInfo, setStoreInfo] = useState<{ name: string; username: string; description: string; email: string; contact: string; address: string; image: File | "" }>({
         name: "",
         username: "",
         description: "",

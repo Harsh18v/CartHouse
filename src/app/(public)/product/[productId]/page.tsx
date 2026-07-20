@@ -5,17 +5,18 @@ import type { Product } from "@/assets/assets";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import type { RootState } from "@/lib/store";
 
 export default function Product() {
 
     const { productId } = useParams();
-    const [product, setProduct] = useState<any>(null);
-    const products = useSelector((state: any) => state.product.list);
+    const [product, setProduct] = useState<Product | null>(null);
+    const products = useSelector((state: RootState) => state.product.list);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchProduct = async () => {
         const product = products.find((product: Product) => product.id === productId);
-        setProduct(product);
+        setProduct(product ?? null);
     }
 
     useEffect(() => {

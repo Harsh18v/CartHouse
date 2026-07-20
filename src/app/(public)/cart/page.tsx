@@ -8,6 +8,7 @@ import { Link, Trash2Icon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/lib/store";
 
 
 
@@ -17,10 +18,10 @@ interface CartItem extends Product {
 
 export default function Cart() {
 
-    const { data: user } = useSelector((state: any) => state.user);
+    const { data: user } = useSelector((state: RootState) => state.user);
 
-    const { cartItems } = useSelector((state: any) => state.cart);
-    const products = useSelector((state: any) => state.product.list);
+    const { cartItems } = useSelector((state: RootState) => state.cart);
+    const products = useSelector((state: RootState) => state.product.list);
 
     const dispatch = useDispatch();
 

@@ -8,12 +8,13 @@ import Image from "next/image";
 import Counter from "./Counter";
 import { useDispatch, useSelector } from "react-redux";
 import type { Product } from "@/assets/assets";
+import type { RootState } from "@/lib/store";
 
 const ProductDetails = ({ product }: { product: Product }) => {
 
     const productId = product.id;
 
-    const cart = useSelector((state: any) => state.cart.cartItems);
+    const cart = useSelector((state: RootState) => state.cart.cartItems);
     const dispatch = useDispatch();
 
     const router = useRouter()

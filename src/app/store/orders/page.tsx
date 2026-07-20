@@ -10,10 +10,7 @@ export default function StoreOrders() {
     const [isModalOpen, setIsModalOpen] = useState(false)
 
 
-    const fetchOrders = async () => {
-        setOrders(orderDummyData)
-        setLoading(false)
-    }
+
 
     const updateOrderStatus = async (orderId: string, status: string) => {
         // Logic to update the status of an order
@@ -32,6 +29,10 @@ export default function StoreOrders() {
     }
 
     useEffect(() => {
+        const fetchOrders = async () => {
+            setOrders(orderDummyData)
+            setLoading(false)
+        }
         fetchOrders()
     }, [])
 
@@ -128,12 +129,12 @@ export default function StoreOrders() {
                                                 alt={item.product?.name}
                                                 className="w-16 h-16 object-cover rounded"
                                             />
-                                        <div className="flex-1">
-                                            <p className="text-slate-800">{item.product?.name}</p>
-                                            <p>Qty: {item.quantity}</p>
-                                            <p>Price: {item.price}</p>
+                                            <div className="flex-1">
+                                                <p className="text-slate-800">{item.product?.name}</p>
+                                                <p>Qty: {item.quantity}</p>
+                                                <p>Price: {item.price}</p>
+                                            </div>
                                         </div>
-                                    </div>
                                     )
                                 })}
                             </div>

@@ -1,10 +1,11 @@
 'use client'
 import { addToCart, removeFromCart } from "@/lib/features/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/lib/store";
 
 const Counter = ({ productId }: { productId: string }) => {
 
-    const { cartItems } = useSelector((state: any) => state.cart);
+    const { cartItems } = useSelector((state: RootState) => state.cart);
 
     const dispatch = useDispatch();
 

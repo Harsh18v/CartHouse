@@ -41,7 +41,7 @@ const BestSelling = () => {
                     </h3>
 
                     <p className="mt-2 text-gray-500">
-                        Once products receive customer ratings, they'll appear here.
+                        Once products receive customer ratings, they will appear here.
                     </p>
                 </div>
             ) : (

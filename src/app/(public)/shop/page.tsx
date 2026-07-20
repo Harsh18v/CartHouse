@@ -5,6 +5,7 @@ import { MoveLeftIcon } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useSelector } from "react-redux"
 import type { Product } from "@/assets/assets"
+import type { RootState } from "@/lib/store"
 
 function ShopContent() {
 
@@ -13,7 +14,7 @@ function ShopContent() {
     const search = searchParams.get('search')
     const router = useRouter()
 
-    const products = useSelector((state: any) => state.product.list)
+    const products = useSelector((state: RootState) => state.product.list)
 
     const filteredProducts = search
         ? products.filter((product: Product) =>

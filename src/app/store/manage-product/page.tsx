@@ -10,16 +10,17 @@ export default function StoreManageProducts() {
     const [loading, setLoading] = useState(true)
     const [products, setProducts] = useState<Product[]>([])
 
-    const fetchProducts = async () => {
-        setProducts(productDummyData)
-        setLoading(false)
-    }
+
 
     const toggleStock = async (productId: string) => {
         // Logic to toggle the stock of a product
     }
 
     useEffect(() => {
+        const fetchProducts = async () => {
+            setProducts(productDummyData)
+            setLoading(false)
+        }
         fetchProducts()
     }, [])
 

@@ -1,5 +1,5 @@
 'use client'
-import { dummyAdminDashboardData } from "@/assets/assets"
+import { dummyAdminDashboardData, type AdminOrderSummary } from "@/assets/assets"
 import Loading from "@/components/Loading"
 import OrdersAreaChart from "@/components/OrdersAreaChart"
 import { CircleDollarSignIcon, ShoppingBasketIcon, StoreIcon, TagsIcon } from "lucide-react"
@@ -9,7 +9,7 @@ export default function AdminDashboard() {
 
 
     const [loading, setLoading] = useState(true)
-    const [dashboardData, setDashboardData] = useState<{ products: number; revenue: number; orders: number; stores: number; allOrders: any[] }>({
+    const [dashboardData, setDashboardData] = useState<{ products: number; revenue: number; orders: number; stores: number; allOrders: AdminOrderSummary[] }>({
         products: 0,
         revenue: 0,
         orders: 0,

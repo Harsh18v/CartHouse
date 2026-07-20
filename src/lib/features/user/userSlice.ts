@@ -1,14 +1,21 @@
 // lib/features/user/userSlice.ts
 import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import type { User } from "@/assets/assets";
+
+interface UserState {
+    data: User | null;
+    loading: boolean;
+}
 
 const userSlice = createSlice({
     name: "user",
     initialState: {
         data: null,
         loading: true,
-    },
+    } as UserState,
     reducers: {
-        setUser: (state, action) => {
+        setUser: (state, action: PayloadAction<User | null>) => {
             state.data = action.payload;
             state.loading = false;
         },

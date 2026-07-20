@@ -94,31 +94,6 @@ export default function AccountPage() {
     const [error, setError] = useState("")
     const router = useRouter();
 
-    const fetchUser = async () => {
-        try {
-            setLoading(true);
-            const res = await fetch("/api/auth/get-me", {
-                method: "GET",
-                credentials: "include", // sends the session cookie along with the request
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-
-            if (!res.ok) {
-                throw new Error("Failed to fetch user data");
-            }
-
-            const data = await res.json();
-            setUser(data.user || null);
-        } catch (err: any) {
-            setError(err.message || "Something went wrong");
-            toast.error("Could not load your account details");
-        } finally {
-            setLoading(false);
-        }
-    };
-
 
     const handleLogout = async () => {
         try {
@@ -134,12 +109,36 @@ export default function AccountPage() {
             toast.success("Logged out successfully");
             router.push("/");
             router.refresh(); // clears any cached user state from Next.js router cache
-        } catch (err: any) {
+        } catch {
             toast.error("Could not log out. Please try again.");
         }
     };
 
     useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                setLoading(true);
+                const res = await fetch("/api/auth/get-me", {
+                    method: "GET",
+                    credentials: "include", // sends the session cookie along with the request
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                if (!res.ok) {
+                    throw new Error("Failed to fetch user data");
+                }
+
+                const data = await res.json();
+                setUser(data.user || null);
+            } catch (err: unknown) {
+                setError(err instanceof Error ? err.message : "Something went wrong");
+                toast.error("Could not load your account details");
+            } finally {
+                setLoading(false);
+            }
+        };
         fetchUser()
     }, [])
 

@@ -50,30 +50,31 @@ const Navbar = () => {
             setUser(null);
             router.push("/");
             router.refresh();
-        } catch (err: any) {
+        } catch {
             toast.error("Could not log out. Please try again.");
         }
     };
 
-    const getUser = async () => {
-        try {
-            const res = await fetch('/api/auth/get-me', { credentials: 'include' })
 
-            if (!res.ok) {
-                setUser(null)
-                return
-            }
-
-            const data = await res.json()
-            setUser(data.user?.name || null)
-
-        } catch (error) {
-            console.error(error)
-            setUser(null)
-        }
-    }
 
     useEffect(() => {
+        const getUser = async () => {
+            try {
+                const res = await fetch('/api/auth/get-me', { credentials: 'include' })
+
+                if (!res.ok) {
+                    setUser(null)
+                    return
+                }
+
+                const data = await res.json()
+                setUser(data.user?.name || null)
+
+            } catch (error) {
+                console.error(error)
+                setUser(null)
+            }
+        }
         getUser()
     }, [pathname])
 

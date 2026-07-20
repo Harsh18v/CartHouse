@@ -2,10 +2,7 @@
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
 interface Order {
-    id: string
     createdAt: string
-    total: number
-    status: string
 }
 
 interface OrdersAreaChartProps {

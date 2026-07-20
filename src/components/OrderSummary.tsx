@@ -4,6 +4,7 @@ import AddressModal from './AddressModal';
 import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import type { Product } from '@/assets/assets';
 
 interface Address {
     name: string
@@ -23,7 +24,7 @@ interface Coupon {
 
 interface OrderSummaryProps {
     totalPrice: number
-    items: any[]
+    items: Product[]
 }
 
 const OrderSummary = ({ totalPrice, items }: OrderSummaryProps) => {

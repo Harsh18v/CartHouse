@@ -3,30 +3,7 @@ import { ArrowRight, StarIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
-
-interface ReviewUser {
-    name: string
-    image: string
-}
-
-interface Rating {
-    rating: number
-    review: string
-    createdAt: string
-    user: ReviewUser
-}
-
-interface Store {
-    name: string
-    username: string
-    logo: string
-}
-
-interface Product {
-    description: string
-    rating: Rating[]
-    store: Store
-}
+import type { Product } from "@/assets/assets"
 
 interface ProductDescriptionProps {
     product: Product
@@ -59,7 +36,7 @@ const ProductDescription = ({ product }: ProductDescriptionProps) => {
                     {product.rating.length > 0 ? (
                         product.rating.map((item, index) => (
                             <div key={index} className="flex gap-5 mb-10">
-                                <Image src={item.user.image} alt="" className="size-10 rounded-full ring-2 ring-indigo-100" width={100} height={100} />
+                                <Image src={item.user.image ?? "/file.svg"} alt="" className="size-10 rounded-full ring-2 ring-indigo-100" width={100} height={100} />
                                 <div>
                                     <div className="flex items-center" >
                                         {Array(5).fill('').map((_, i) => (
@@ -80,7 +57,7 @@ const ProductDescription = ({ product }: ProductDescriptionProps) => {
 
             {/* Store Page */}
             <div className="flex gap-3 mt-14 items-center bg-indigo-50/50 rounded-2xl p-5 w-fit">
-                <Image src={product.store.logo} alt="" className="size-11 rounded-full ring-2 ring-indigo-200" width={100} height={100} />
+                <Image src={product.store.logo ?? "/file.svg"} alt="" className="size-11 rounded-full ring-2 ring-indigo-200" width={100} height={100} />
                 <div>
                     <p className="font-medium text-slate-700">Product by {product.store.name}</p>
                     <Link href={`/shop/${product.store.username}`} className="flex items-center gap-1.5 text-indigo-600 hover:text-indigo-700 font-medium transition-colors"> view store <ArrowRight size={14} /></Link>
